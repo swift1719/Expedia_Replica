@@ -1,0 +1,17 @@
+#searchbox{
+    padding: 1rem;
+    width: 80%;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.links{
+    padding: 10px;
+    cursor:pointer;
+}
+
+.active{
+    border-bottom: 3px solid #3662D8;
+    border-radius: 3px;
+    color: #3662D8;
+}

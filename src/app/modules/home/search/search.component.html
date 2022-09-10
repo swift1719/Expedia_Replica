@@ -1,0 +1,28 @@
+<div id="searchbox" class="card mt-4 mx-auto p-auto">
+    <div class="row  justify-content-center text-center">
+        <!-- <div id="flights" class="col-2 links " (click)="switchTab('flights')">
+            Flights
+        </div> -->
+        <div id="hotels"  class="col-1 links active" (click)="switchTab('hotels')">
+            Hotels
+        </div>
+        <div id="cars" class="col-1 links " (click)="switchTab('cars')">
+            Cars
+        </div>
+        <div id="activity" class="col-1 links " (click)="switchTab('activity')">
+            Activity
+        </div>
+    </div>
+    <hr>
+    <div class="row justify-content-center text-center">
+        <section *ngIf="id=='flights'" class="container m-5 p-auto">
+    
+            <div class="row justify-content-center text-center">
+                Flights Search 
+            </div>
+        </section>
+        <app-hotel-search *ngIf="id=='hotels'"></app-hotel-search>
+        <app-car-search *ngIf="id=='cars'"></app-car-search>
+        <app-activity-search *ngIf="id=='activity'"></app-activity-search>
+    </div>
+</div>
