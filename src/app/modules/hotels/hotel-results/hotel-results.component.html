@@ -1,0 +1,43 @@
+
+<section class="container my-5 mx-auto">
+    <div class="row my-2 p-2">
+        <h3>Hotels available in {{res_state.city_name}} from {{res_state.fromDate}} to {{res_state.toDate}}</h3>
+    </div>
+    <div class="row border mt-2 border-3 rounded p-2"  *ngFor="let hotel of hotels" id={{hotel.id}}>
+        <div class="col-3 p-2">
+            <img class="car-img-top rounded" width="250px" height="170px" src={{hotel.image_url}} alt={{hotel.name}}>
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <h2>
+                {{hotel.name}}
+                </h2>
+            </div>    
+            <div class="row" >
+                <span>
+                    Address : {{hotel.address}} , {{hotel.cityName}} , {{hotel.stateName}}
+
+                </span>
+            </div>
+            <div class="row">
+                <span>
+                    Distance : {{hotel.distance }}
+                </span>
+                <span>
+                    Rating : {{hotel.rating}}
+                </span>
+            </div>
+            <div class="row">
+                <span>
+                Fare : {{hotel.totalFare | currency:'USD'}}
+
+                </span>
+                <span>
+                    Refundability : {{hotel.refundability}} 
+                </span>
+            </div>
+            
+        </div>
+        
+    </div>
+</section>
