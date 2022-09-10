@@ -1,0 +1,38 @@
+<section class="container my-5">
+    
+    <form #activitySearchForm="ngForm"  (ngSubmit)="onSubmit(activitySearchForm.value)">
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="row">
+                    <input 
+                    [(ngModel)]="activitySearchInput" 
+                    autocomplete="off"  
+                    type="text" 
+                    name="location"  
+                    class="form-control col-10" 
+                    placeholder="Enter location" 
+                    (keyup)="getSuggestedPlaces()" 
+                    />
+                </div>
+                
+                <div class="row mt-1 list-box" *ngIf="locations_loaded">
+
+                        <div class="alert alert-primary list-item"  *ngFor="let location of locations" (click)="chooseLocation($event.target)" id={{location.key}}>
+                        {{location.city_name}}, {{location.country}} 
+                              
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <input ngModel type="date" name="from_date" class="form-control" placeholder="From" />
+            </div>
+            <div class="col-2">
+                <input ngModel type="date" name="to_date" class="form-control" placeholder="To" />
+            </div>
+        </div>
+        <div class="row m-3 justify-content-center">
+            <button *ngIf="!locations_loaded"  class="btn btn-primary btn-color col-2" type="submit">Search</button>
+        </div>
+    </form>
+
+</section>

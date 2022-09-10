@@ -1,0 +1,31 @@
+
+<section class="container my-5 mx-auto">
+    <div class="row my-2 p-2">
+        <h3>Activities availabe in {{res_state.cityName}} from {{res_state.fromDate}} to {{res_state.toDate}}</h3>
+    </div>
+    <div class="row  border mt-2 border-3 rounded p-2"  *ngFor="let activity of activities" id={{activity.id}}>
+        <div class="col-3 p-2">
+            <img class="car-img-top rounded" width="250px" src={{activity.image_url}} alt={{activity.name}}>
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <h2>
+                {{activity.name}}
+                </h2>
+            </div>    
+            <div class="row" >
+                Rating : {{activity.rating}}
+            </div>
+            <div class="row">
+                Duration : {{activity.duration}}
+            </div>
+            <div class="row">
+                Fare : {{activity.totalFare | currency:'USD'}}
+            </div>
+            <div class="row text-truncate">
+                {{activity.summary}}
+            </div>
+        </div>
+        
+    </div>
+</section>
