@@ -1,0 +1,10 @@
+footer{
+    position: fixed;
+    bottom: 0;
+    z-index: 20;
+    background-color:rgb(247, 250, 250);
+    width: 100%;
+}
+p{
+    padding-bottom: 0;
+}
