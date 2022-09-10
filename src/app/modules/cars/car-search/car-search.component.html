@@ -1,0 +1,59 @@
+<section class="container my-5">
+    
+    <form #carSearchForm="ngForm"  (ngSubmit)="onSubmit(carSearchForm.value)">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <div class="row mx-auto">
+                    <input 
+                    [(ngModel)]="pickup_location_input" 
+                    autocomplete="off"  
+                    type="text" 
+                    name="pickup_location"  
+                    class="form-control" 
+                    placeholder="Enter pick-up location" 
+                    (keyup)="getSuggestedPlaces('pickup')" 
+                    />
+                </div>
+                
+                <div class="row mt-1 list-box" *ngIf="pickup_locations_loaded">
+
+                    <div class="alert alert-primary list-item"  *ngFor="let location of pickup_locations" (click)="chooseLocation($event.target,'pickup')" id={{location.key}}>
+                        {{location.city_name}}, {{location.country}} 
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row">
+                    <input 
+                    [(ngModel)]="drop_location_input" 
+                    autocomplete="off"  
+                    type="text" 
+                    name="drop_location"  
+                    class="form-control " 
+                    placeholder="Enter drop location" 
+                    (keyup)="getSuggestedPlaces('drop')" 
+                    />
+                </div>
+                
+                <div class="row mt-1 list-box" *ngIf="drop_locations_loaded">
+
+                        <div class="alert alert-primary list-item"  *ngFor="let location of drop_locations" (click)="chooseLocation($event.target,'drop')" id={{location.key}}>
+                        {{location.city_name}}, {{location.country}} 
+                             
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <input ngModel type="date" name="from_date" class="form-control" placeholder="From" />
+            </div>
+            <div class="col-2">
+                <input ngModel type="date" name="to_date" class="form-control" placeholder="From" />
+            </div>
+            
+        </div>
+        <div class="row m-3 justify-content-center">
+            <button *ngIf="!drop_locations_loaded && !pickup_locations_loaded" class="btn btn-primary btn-color col-2" type="submit">Search</button>
+        </div>
+    </form>
+
+</section>

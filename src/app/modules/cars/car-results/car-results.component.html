@@ -1,0 +1,41 @@
+<section class="container my-5 mx-auto">
+    <div class="row my-2 p-2">
+        <h3>Cars available from {{res_state.from}} -> {{res_state.to}} between {{res_state.fromDate}} - {{res_state.toDate}}</h3>
+    </div>
+    <div class="row  border mt-2 border-3 rounded p-2"  *ngFor="let car of cars" id={{car.id}}>
+        <div class="col-3 p-2">
+            <img class="car-img-top rounded" width="250px" src={{car.imageUrl}} alt={{car.vehicleName}}>
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <h2>
+                {{car.vehicleName}}
+                </h2>
+            </div>    
+            <div class="row" >
+                <span>
+                    Vehicle Type : {{car.vehicleType}}
+                </span>
+                <span>
+                    Transmission : {{car.transmission}}
+                </span>
+                <span>
+                    Passenger Capacity : {{car.passengerCapacity}}
+                </span>
+            </div>
+            <div class="row">
+                <span>
+                    Fare : {{car.totalFare | currency:'USD'}}
+                </span>
+                <span>
+                    Fare Type : {{car.fareType}}
+                </span>
+                <span>
+                    Inventory Type : {{car.inventoryType}}
+                </span>
+            </div>
+            
+        </div>
+        
+    </div>
+</section>
