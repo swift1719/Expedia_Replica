@@ -100,7 +100,7 @@ export class CarSearchComponent implements OnInit {
         if(res.status!='Completed'){
           delay(5000);
         }
-        (await this.carSearchService.SearchResult())
+        (await this.carSearchService.SearchResult(rs))
         .subscribe((response:any)=>{
           // console.log(response);
           this.cars_rental=response;

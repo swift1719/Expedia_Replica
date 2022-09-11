@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {environment } from '../../environments/environment';
-import { delay } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -101,7 +100,7 @@ export class ActivityService {
 
     return this.myClient.post(this.url+"/status",body,{headers:this.headers})
   }
-  async SearchResult(){
+  async SearchResult(data:any){
 
       let body = {
         "paging": {
@@ -109,7 +108,7 @@ export class ActivityService {
           "pageSize": 30,
           "orderBy": "price"
         },
-        "sessionId": this.sessionId,
+        "sessionId": data.sessionId,
         "currency": "USD"
       };
       return this.myClient.post(this.url + "/result", body, { headers: this.headers });

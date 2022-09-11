@@ -107,7 +107,7 @@ export class ActivitySearchComponent implements OnInit {
         }
         // console.log(rs);
 
-        (await this.searchService.SearchResult())
+        (await this.searchService.SearchResult(res))
         .subscribe((res:any)=>{
           this.activities=res.activities;
           // console.log(this.activities);

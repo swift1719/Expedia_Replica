@@ -122,10 +122,10 @@ export class CarsService {
     return this.httpClient.post(this.url+'/status',body,{headers:headers})
   }
 
-  async SearchResult(){
+  async SearchResult(data:any){
 
     var body={
-      "sessionId": this.sessionId,
+      "sessionId": data.sessionId,
       "currency": "USD",
       "paging": {
         "pageNo": 1,

@@ -1,6 +1,5 @@
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -107,10 +106,6 @@ export class HotelsService {
   async SearchResult(data:any){
     this.searchStatusResponse=data;
 
-    // if(this.searchStatusResponse.status=='InProgress'){
-    //   delay(10000);
-    // }
-    // console.log(this.searchStatusResponse);
       var body={  
         "sessionId":this.sessionId,
         "paging":{  
