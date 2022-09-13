@@ -16,7 +16,7 @@ export class AutosuggestService {
   constructor(private myClient:HttpClient){}
 
 
-  async fetchLocations(query:string,consumerType:string) {
+  fetchLocations(query:string,consumerType:string) {
     var body = 
       {
         sq: {
@@ -30,7 +30,6 @@ export class AutosuggestService {
         c: consumerType
     };
 
-
     let headers = new HttpHeaders({
       'Content-Type':'application/json',
       'cnx-sessionId':this.sessionId,
@@ -39,9 +38,7 @@ export class AutosuggestService {
     });
 
     let options= {headers:headers};
-    
-    return this.myClient.post(this.url, body, options)
-      
+    return this.myClient.post<any>(this.url, body, options)
   }
   
 }

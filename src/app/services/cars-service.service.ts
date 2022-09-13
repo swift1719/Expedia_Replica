@@ -17,13 +17,13 @@ export class CarsService {
   drop_latitude:any=null;
   drop_longitude:any=null;
 
-  async SearchInit(data:any){
-    this.fromDate=data.from_date;
-    this.toDate=data.to_date;
-    this.pickup_latitude=data.pickup_latitude;
-    this.pickup_longitude=data.pickup_longitude;
-    this.drop_latitude=data.drop_latitude;
-    this.drop_longitude=data.drop_longitude;
+  SearchInit(data:any){
+    this.fromDate=data?.from_date;
+    this.toDate=data?.to_date;
+    this.pickup_latitude=data?.pickup_latitude;
+    this.pickup_longitude=data?.pickup_longitude;
+    this.drop_latitude=data?.drop_latitude;
+    this.drop_longitude=data?.drop_longitude;
 
     var body ={
       "currency": "USD",
@@ -102,13 +102,13 @@ export class CarsService {
       "cnx-tenantId": "2pu5zh4e9kw",
       "cnx-environment-token": "T3"
     })
-    return this.httpClient.post(this.url+'/init',body,{headers:headers});
+    return this.httpClient.post<any>(this.url+'/init',body,{headers:headers});
   }
 
   sessionId:any=null;
 
-  async SearchStatus(data:any){
-    this.sessionId=data.sessionId;
+  SearchStatus(data:any){
+    this.sessionId=data?.sessionId;
     var body={
       "sessionId": this.sessionId
     }
@@ -119,13 +119,13 @@ export class CarsService {
       "cnx-environment-token": "T2",
       "cnx-correlationId":"8f6aeee6-5575-4a5a-8387-ab8052641b17"
     })
-    return this.httpClient.post(this.url+'/status',body,{headers:headers})
+    return this.httpClient.post<any>(this.url+'/status',body,{headers:headers})
   }
 
-  async SearchResult(data:any){
+  SearchResult(data:any){
 
     var body={
-      "sessionId": data.sessionId,
+      "sessionId": data?.sessionId,
       "currency": "USD",
       "paging": {
         "pageNo": 1,
@@ -164,6 +164,6 @@ export class CarsService {
       "cnx-correlationId":"8f6aeee6-5575-4a5a-8387-ab8052641b17"
     });
 
-    return this.httpClient.post(this.url+'/results',body,{headers:headers});
+    return this.httpClient.post<any>(this.url+'/results',body,{headers:headers});
   }
 }

@@ -16,7 +16,7 @@ export class HotelsService {
   lat:any;
   long:any;
 
-  async SearchInit(data:any){
+  SearchInit(data:any){
 
     this.fromDate=data.from_date;
     this.toDate=data.to_date;
@@ -77,13 +77,13 @@ export class HotelsService {
       "Accept-Language": "en-US"
     });
     
-    return this.httpClient.post(this.url+"/init",body,{headers:myHeaders});
+    return this.httpClient.post<any>(this.url+"/init",body,{headers:myHeaders});
   }
 
   sessionId:any=null;
 
-  async SearchStatus(data:any){
-    this.sessionId=data.sessionId;
+  SearchStatus(data:any){
+    this.sessionId=data?.sessionId;
     var myHeaders = new HttpHeaders({
       "Content-Type": "application/json",
       "loyalty-userIp": "127.0.0.1",
@@ -99,15 +99,15 @@ export class HotelsService {
     var body ={ 
       "sessionId" : this.sessionId
     }
-    return this.httpClient.post(this.url+"/status",body,{headers:myHeaders});
+    return this.httpClient.post<any>(this.url+"/status",body,{headers:myHeaders});
   }
 
   searchStatusResponse:any=null;
-  async SearchResult(data:any){
-    this.searchStatusResponse=data;
+  SearchResult(data:any){
+    // this.searchStatusResponse=data;
 
       var body={  
-        "sessionId":this.sessionId,
+        "sessionId":data?.sessionId,
         "paging":{  
           "pageNo":1,
           "pageSize":20,
@@ -140,7 +140,7 @@ export class HotelsService {
       "cnx-environment-token": "SG",      
     });
 
-    return this.httpClient.post(this.url+"/results",body,{headers:headers});
+    return this.httpClient.post<any>(this.url+"/results",body,{headers:headers});
   }
 
 }

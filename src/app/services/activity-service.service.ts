@@ -23,7 +23,7 @@ export class ActivityService {
   lat:any;
   long:any;
 
-  async SearchInit(data:any) {
+  SearchInit(data:any) {
     
     this.fromDate=data.from_date;
     this.toDate=data.to_date;
@@ -86,21 +86,22 @@ export class ActivityService {
 
     let options= {headers:this.headers};
     
-    return this.myClient.post(this.url + "/init", body, options);
+    return this.myClient.post<any>(this.url + "/init", body, options);
     
   }
 
 
-  async SearchStatus(data:any){
-    this.sessionId=data.sessionId;
+  SearchStatus(data:any){
+    this.sessionId=data?.sessionId;
     // console.log(this.sessionId)
     let body={
       "sessionId":this.sessionId
     };
 
-    return this.myClient.post(this.url+"/status",body,{headers:this.headers})
+    return this.myClient.post<any>(this.url+"/status",body,{headers:this.headers})
   }
-  async SearchResult(data:any){
+  
+  SearchResult(data:any){
 
       let body = {
         "paging": {
@@ -108,10 +109,10 @@ export class ActivityService {
           "pageSize": 30,
           "orderBy": "price"
         },
-        "sessionId": data.sessionId,
+        "sessionId": data?.sessionId,
         "currency": "USD"
       };
-      return this.myClient.post(this.url + "/result", body, { headers: this.headers });
+      return this.myClient.post<any>(this.url + "/result", body, { headers: this.headers });
   }
     
 }

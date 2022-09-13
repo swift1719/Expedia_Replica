@@ -1,110 +1,109 @@
 import { TestBed } from '@angular/core/testing';
-import {HttpClientTestingModule , HttpTestingController} from '@angular/common/http/testing'
-import { HotelsService } from './hotels-service.service';
+
 import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { environment } from 'src/environments/environment';
+import { HotelsService } from './hotels-service.service';
+import { of } from 'rxjs';
 
-describe('Hotels Service Tests', () => {
+
+describe('Hotel Service Tests', () => {
   let service: HotelsService;
-  let http  : HttpClient;
-  let httpControler : HttpTestingController;
-  let url = environment.HOTELS_API_BASE_URL;
-
-  let searchInitResponseExpected : any = {
-    "sessionId" : ""
-  };
-
-  let searchStatusResponseExpected : any = {
-    "status" : "",
-    "resultCount" : ""
-  };
-
-  let searchResultResponseExpected : any = {
-    "hotels" : []
-  };
-
-
+  let httpClient: HttpClient;
+  let httpTestingController: HttpTestingController;
+  let hotelBaseUrl=environment.HOTELS_API_BASE_URL;
+  let hotelTestSessionId = "cb32cfaf-0adb-4ceb-9a37-29707d3a37b8-HLNXT$1371";
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      providers : [HotelsService]
+      imports: [HttpClientTestingModule],
+      providers: [HotelsService]
     });
-    service = TestBed.inject(HotelsService);                //creating instance
-    http = TestBed.inject(HttpClient);
-    httpControler = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(HotelsService);
+    httpClient = TestBed.inject(HttpClient);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
-
-  afterEach(()=>{
-    httpControler.verify();
-  })
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('send post request to Hotel Search Init',async ()=>{
-    let searchInitResponseReceived : any = {};
-    let request_data = {
-      "from_date":"2022-09-16",
-      "to_date":"2022-09-21",
-      "latitude":36.08333206176758,
-      "longitude":-115.16666412353516
-    };
-    (await service.SearchInit(request_data)).subscribe((data:any)=>{
-      searchInitResponseReceived = data;
-    });
-    let req = httpControler.expectOne(`${url}/init`)
+  var request_data = {
+    'from_date': '2022-09-23',
+    'to_date': '2022-09-25',
+    'latitude': 36.083333333333336,
+    'longitude': -115.16666666666669
+  }
 
-    req.flush(searchInitResponseExpected);
-    expect(req.request.method).toBe("POST");
+  it('should send post request to search init api',()=>{
+    service.SearchInit(request_data).subscribe()
+    const req = httpTestingController.expectOne(hotelBaseUrl + '/init');
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.responseType).toEqual('json');
+    req.flush(request_data);
   })
 
-  it('should receive a valid response calling hotel search init api',async ()=>{
-    (await service.SearchInit(searchInitResponseExpected)).subscribe((data:any)=>{
-      expect(data.hasOwnProperty('sessionId')).toBe(true);
-    });
-    let req = httpControler.expectOne(`${url}/init`)
+  it('should return valid response from search init api', () => {
 
-    req.flush(searchInitResponseExpected);
-  })
-
-  it('should send a post request calling Search Status',async ()=>{
-    (await service.SearchStatus(searchInitResponseExpected)).subscribe((data:any)=>{
-      searchStatusResponseExpected = data;
-    });
-    let req = httpControler.expectOne(`${url}/status`)
-
-    req.flush(searchStatusResponseExpected);
-    expect(req.request.method).toBe("POST");
-  })
-
-  it('should receive a valid response calling hotel search status api',async ()=>{
-    (await service.SearchStatus(searchStatusResponseExpected)).subscribe((data:any)=>{
-      expect(data.hasOwnProperty('status')).toBe(true);
-      expect(data.hasOwnProperty('resultCount')).toBe(true);
-    });
-    let req = httpControler.expectOne(`${url}/status`)
-    req.flush(searchStatusResponseExpected);
-  });
-
-  it('should send a post request calling hotel search result api',async ()=>{
-    (await service.SearchResult(searchResultResponseExpected)).subscribe((data:any)=>{
-      searchResultResponseExpected = data;
-    });
-    let req = httpControler.expectOne(`${url}/results`);
-    expect(req.request.method).toBe("POST");
+    let searchResponseExpected:any={
+      "sessionId": "cf450fa5-72cd-4387-a378-74a542fe6eba-ACNXT$1371"
+    }
     
-    req.flush(searchResultResponseExpected);
+    spyOn(service,'SearchInit').and.callFake(()=>{
+      return (of(searchResponseExpected))
+    })
+
+    
+    service.SearchInit(request_data).subscribe((rs:any)=>{
+      expect(rs).toEqual(searchResponseExpected);
+    })
   });
 
-  it('should receive a valid response calling hotel search result api',async ()=>{
-    (await service.SearchResult(searchStatusResponseExpected)).subscribe((data:any)=>{
-      expect(data.hasOwnProperty('hotels')).toBe(true);
+  
+
+  it('should send post request to  search status api', () => {
+    service.SearchStatus({"sessionId":hotelTestSessionId}).subscribe();
+    const req = httpTestingController.expectOne(hotelBaseUrl + '/status');
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.responseType).toEqual('json');
+    req.flush(hotelTestSessionId);
+  });
+
+  it('should recieve a valid response from search status api',()=>{
+
+    let expected={
+      "status": "Completed",
+      "resultCount": 89
+    }
+
+    spyOn(service,'SearchStatus').and.callFake(()=>{
+      return (of(expected))
+    })
+    service.SearchStatus({"sessionId":hotelTestSessionId}).subscribe((rs:any)=>{
+      expect(rs).toEqual(expected);
     });
-    let req = httpControler.expectOne(`${url}/results`)
+  })
 
-    req.flush(searchResultResponseExpected);
+  it('should send a post request to search result api', () => {
+    service.SearchResult({'sessionId': hotelTestSessionId}).subscribe();
+    const req = httpTestingController.expectOne(hotelBaseUrl + '/results');
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.responseType).toEqual('json');
+    req.flush({'sessionId': hotelTestSessionId});
   });
 
+  it('should receive a valid response from search result api',()=>{
 
+    let expected={
+      "sessionId":'',
+      "hotels":[],
+      "paging":{}
+    }
+    spyOn(service,'SearchResult').and.callFake(()=>{
+      return (of(expected));
+    })
+    service.SearchResult({'sessionId': hotelTestSessionId}).subscribe((rs:any)=>{
+      expect(rs).toEqual(expected);
+    });
+
+  })
 });
