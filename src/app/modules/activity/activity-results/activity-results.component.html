@@ -1,7 +1,7 @@
 
 <section class="container my-5 mx-auto">
     <div class="row my-2 p-2">
-        <h3>Activities availabe in {{res_state.cityName}} from {{res_state.fromDate}} to {{res_state.toDate}}</h3>
+        <h3>Activities availabe in {{res_state?.cityName}} from {{res_state?.fromDate}} to {{res_state?.toDate}}</h3>
     </div>
     <div class="row  border mt-2 border-3 rounded p-2"  *ngFor="let activity of activities" id={{activity.id}}>
         <div class="col-3 p-2">

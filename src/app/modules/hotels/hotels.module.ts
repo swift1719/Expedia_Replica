@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { HotelsRoutingModule } from './hotels-routing.module';
 import { HotelSearchComponent } from './hotel-search/hotel-search.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -17,10 +16,11 @@ import { HotelResultsComponent } from './hotel-results/hotel-results.component';
     CommonModule,
     HotelsRoutingModule,
     NgbModule,
-    FormsModule
+    FormsModule,
   ],
   exports:[
-    HotelSearchComponent
+    HotelSearchComponent,
+    HotelResultsComponent,
   ]
 })
 export class HotelsModule { }

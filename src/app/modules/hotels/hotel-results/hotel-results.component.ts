@@ -13,7 +13,7 @@ export class HotelResultsComponent implements OnInit {
   constructor(private router:Router) {
     this.res_state=this.router.getCurrentNavigation()?.extras.state;
 
-    this.hotels= this.res_state.hotels.map((hotel:any)=>{
+    this.hotels= this.res_state?.hotels.map((hotel:any)=>{
       return {
         "name":hotel.name,
         "id":hotel.id,
@@ -22,7 +22,7 @@ export class HotelResultsComponent implements OnInit {
         "stateName":hotel.content.contact.address.state.name,
         "cityName":hotel.content.contact.address.city.name,
         "address":hotel.content.contact.address.line1,
-        "image_url":hotel.content.heroImage.url,
+        "image_url":hotel.content.heroImage?.url,
         "distance":hotel.distanceKm,
         "refundability":hotel.refundability        
       }

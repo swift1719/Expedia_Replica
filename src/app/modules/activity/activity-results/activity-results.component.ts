@@ -14,7 +14,7 @@ export class ActivityResultsComponent implements OnInit {
   constructor(private router:Router) {
     this.res_state=this.router.getCurrentNavigation()?.extras.state;
 
-    this.activities = this.res_state.activities.map((activity:any)=>{
+    this.activities = this.res_state?.activities.map((activity:any)=>{
       return {
         "id":activity.id,
         "name":activity.name,

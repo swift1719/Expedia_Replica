@@ -19,10 +19,10 @@ export class HotelSearchComponent implements OnInit {
   locations:LocationObject[]=[];
   locations_loaded:boolean=false;
 
-  async getSuggestedPlaces(){
-    let location=this.hotelSearchInput;
+  getSuggestedPlaces(data:any){
+    let location=data;
     if(location.length>2){
-      (await this.autoSuggestService.fetchLocations(location,'Hotels')).subscribe(rs=>{
+      (this.autoSuggestService.fetchLocations(location,'Hotels')).subscribe(rs=>{
         this.results=rs;
         let i=0;
         this.locations=this.results.s.map((place:any)=>{
@@ -36,59 +36,83 @@ export class HotelSearchComponent implements OnInit {
             "airport_code":place.n,
           }
         });
-        // console.log(this.locations);
         this.locations_loaded=true;
       });;
-
-      
     }
   }
 
   hotelSearchInput:string='';
-  selectedLocationId:any;
+  selectedLocationId:any=null;
 
   chooseLocation(data:any){
     this.locations_loaded=false;
     this.selectedLocationId=data.id;
-    this.hotelSearchInput=this.locations[data.id].city_name;
+    this.hotelSearchInput=this.locations[data.id]?.city_name;
   }
 
-  hotels:any=null;
+  formData:any=null;
+  searchInitResponse:any=null;
+  city_name='';
 
-  async onSubmit(data:any){
+  onSubmit(data:any){
+    this.formData=data;
+    // console.log(data);
+    let latitude = this.locations[this.selectedLocationId]?.latitude;
+    let longitude = this.locations[this.selectedLocationId]?.longitude;
+    this.city_name= this.locations[this.selectedLocationId]?.city_name;
 
-    let {latitude,longitude,city_name} = this.locations[this.selectedLocationId];
     let request_data = {
-      "from_date":data.check_in,
-      "to_date":data.check_out,
-      "latitude":latitude,
-      "longitude":longitude
+      "from_date":
+      data.check_in,
+      // "2022-09-19",
+      "to_date":
+      data.check_out,
+      // "2022-09-21",
+      "latitude": 
+      latitude,
+      // 36.08333206176758,
+      "longitude": 
+      longitude
+      // -115.16666412353516
     };
-    (await this.hotelSearchService.SearchInit(request_data))
-    .subscribe(async (rs:any)=>{
+    ( this.hotelSearchService.SearchInit(request_data))
+    .subscribe( (rs:any)=>{
+      this.searchInitResponse=rs;
+      this.getStatus();
+    })
+  }
 
-      delay(3000)(await this.hotelSearchService.SearchStatus(rs))
-      .subscribe(async (res:any)=>{
-        if(res.status!='Completed'){
-          delay(5000);
-        }
-        (await this.hotelSearchService.SearchResult(res))
-        .subscribe((response:any)=>{
-          this.hotels=response.hotels;
-          console.log(response);
-          var stateData={
-            hotels:this.hotels,
-            "fromDate":data.check_in,
-            "toDate":data.check_out,
-            "city_name":city_name
-          }
-          this.router.navigateByUrl('/hotel',{state:stateData});
+  searchStatusResponse:any=null;
 
-        })        
+  getStatus(){
+    ( this.hotelSearchService.SearchStatus(this.searchInitResponse))
+      .subscribe((res:any)=>{
+        // console.log(res);
+        this.searchStatusResponse=res;
+        
+        this.getResults();        
       })
+  }
+
+  hotels:any=[];
+  searchResultResponse:any=null;
+
+  getResults(){
+    (this.hotelSearchService.SearchResult(this.searchInitResponse)).subscribe((response:any)=>{
+      this.hotels=response.hotels;
+      // console.log(response);
+      this.searchResultResponse={
+        hotels:this.hotels,
+        "fromDate":this.formData?.check_in,
+        "toDate":this.formData?.check_out,
+        "city_name":this.city_name
+      }
+      this.router.navigateByUrl('/hotel',{state:this.searchResultResponse});
+
     })
   }
 }
+
 interface LocationObject{
   key:string,
   city_name:string,

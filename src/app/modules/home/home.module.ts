@@ -7,6 +7,7 @@ import { SearchComponent } from './search/search.component';
 import { CarsModule } from '../cars/cars.module';
 import { HotelsModule } from '../hotels/hotels.module';
 import { ActivityModule } from '../activity/activity.module';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -19,11 +20,12 @@ import { ActivityModule } from '../activity/activity.module';
     HomeRoutingModule,
     CarsModule,
     HotelsModule,
-    ActivityModule
+    ActivityModule,
+    FormsModule
   ],
   exports:[
     HomeComponent,
-    SearchComponent
+    SearchComponent,
   ]
 })
 export class HomeModule { }

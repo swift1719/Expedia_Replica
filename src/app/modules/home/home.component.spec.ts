@@ -1,6 +1,7 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // import { HomeComponent } from './home.component';
+// import { SearchComponent } from './search/search.component';
 
 // describe('HomeComponent', () => {
 //   let component: HomeComponent;
@@ -8,7 +9,7 @@
 
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       declarations: [ HomeComponent ]
+//       declarations: [ HomeComponent, SearchComponent ]
 //     })
 //     .compileComponents();
 
@@ -20,4 +21,5 @@
 //   it('should create', () => {
 //     expect(component).toBeTruthy();
 //   });
+  
 // });

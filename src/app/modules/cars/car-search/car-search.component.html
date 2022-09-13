@@ -11,7 +11,7 @@
                     name="pickup_location"  
                     class="form-control" 
                     placeholder="Enter pick-up location" 
-                    (keyup)="getSuggestedPlaces('pickup')" 
+                    (keyup)="getSuggestedPlaces('pickup',carSearchForm.value.pickup_location)" 
                     />
                 </div>
                 
@@ -31,7 +31,7 @@
                     name="drop_location"  
                     class="form-control " 
                     placeholder="Enter drop location" 
-                    (keyup)="getSuggestedPlaces('drop')" 
+                    (keyup)="getSuggestedPlaces('drop',carSearchForm.value.drop_location)" 
                     />
                 </div>
                 

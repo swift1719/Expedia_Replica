@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ActivityResultsComponent } from './activity-results/activity-results.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path:'activity',
     component:ActivityResultsComponent

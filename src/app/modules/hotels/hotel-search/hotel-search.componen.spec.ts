@@ -1,48 +1,57 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
-import { ActivityService } from 'src/app/services/activity-service.service';
+import { HotelSearchComponent } from './hotel-search.component';
+import { HotelsService } from 'src/app/services/hotels-service.service';
 import { AutosuggestService } from 'src/app/services/autosuggest-service.service';
-import { ActivityResultsComponent } from '../activity-results/activity-results.component';
-import { routes } from '../activity-routing.module';
-import { ActivitySearchComponent } from './activity-search.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router} from '@angular/router';
+import { routes } from '../hotels-routing.module';
+import { HotelResultsComponent } from '../hotel-results/hotel-results.component';
 
-
-describe('Activity Search Component', () => {
-  let component: ActivitySearchComponent;
-  let searchFixture: ComponentFixture<ActivitySearchComponent>;
-  let router :Router;
+describe('Hotel Search Component', () => {
+  let component: HotelSearchComponent;
+  let resultComponent:HotelResultsComponent;
+  let searchFixture: ComponentFixture<HotelSearchComponent>;
+  let resultFixture:ComponentFixture<HotelResultsComponent>;
   let autosuggestService: AutosuggestService;
-  let activityService : ActivityService;
+  let hotelService: HotelsService;
+  let router :Router;
+  let location:Location;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-        imports:[
-            FormsModule,
-            HttpClientTestingModule,
-            RouterTestingModule.withRoutes(routes)
-        ],
-        declarations: [ 
-            ActivitySearchComponent, 
-            ActivityResultsComponent
-        ],
-        providers:[
-          AutosuggestService,
-          ActivityService,
-        ]
+      declarations: [ HotelSearchComponent,HotelResultsComponent ],
+      imports: [
+        HttpClientTestingModule,
+        FormsModule,
+        RouterTestingModule.withRoutes(routes)
+      ],
+      providers: [
+        AutosuggestService,
+        HotelsService,
+        Location
+      ]
     })
     .compileComponents();
 
-    router = TestBed.inject(Router);
 
-    searchFixture = TestBed.createComponent(ActivitySearchComponent);
+    router = TestBed.inject(Router);
+    // location = TestBed.inject(Location);
+
+    searchFixture = TestBed.createComponent(HotelSearchComponent);
     component = searchFixture.componentInstance;
     searchFixture.detectChanges();
+    // router = searchFixture.debugElement.injector.get(router);
     autosuggestService = searchFixture.debugElement.injector.get(AutosuggestService);
-    activityService = searchFixture.debugElement.injector.get(ActivityService);
+    hotelService = searchFixture.debugElement.injector.get(HotelsService);
+
+    // resultFixture = TestBed.createComponent(HotelResultsComponent);
+    // resultComponent = resultFixture.componentInstance;
+    // router.initialNavigation();
+
   });
 
   it('should create', () => {
@@ -50,7 +59,7 @@ describe('Activity Search Component', () => {
   });
 
   it('getSuggestedPlaces() should fill autosuggested values in #locations', () => {
-    const comp = new ActivitySearchComponent(router, activityService, autosuggestService);
+    const comp = new HotelSearchComponent(router,autosuggestService, hotelService);
     
     expect(comp.locations.length == 0)
       .withContext('initially empty')
@@ -83,9 +92,8 @@ describe('Activity Search Component', () => {
       .toBe(true);
   });
 
-
   it('chooseLocation() should update pickup latitude and longitude', () => {
-    const comp = new ActivitySearchComponent(router, activityService, autosuggestService);
+    const comp = new HotelSearchComponent(router,autosuggestService, hotelService);
     
     expect(comp.selectedLocationId==null)
       .withContext('initially no autosuggested choices loaded')
@@ -98,63 +106,66 @@ describe('Activity Search Component', () => {
       .toBe(true);
   });
 
+  
 
 
-  it('onSubmit() should initiate call to search init',()=>{
-    const comp = new ActivitySearchComponent(router, activityService,autosuggestService);
-    expect(comp.searchInitResponse == null)
+  it('onSubmit() should initiate call to search init ', () => {
+    const comp = new HotelSearchComponent(router,autosuggestService, hotelService);
+    expect(comp.locations.length == 0)
       .withContext('initially #sessionId is empty')
       .toBe(true);
 
     var formData = {
-        "from_date":"2022-09-18",
-        "to_date":"2022-09-19",
         "location":'Las Vegas',
+        "check_in":'2022-09-18',
+        "check_out":'2022-09-19',
+        "no-of-persons":1,
     }
 
-    spyOn(activityService,'SearchInit').and.callFake(() => {
+    spyOn(hotelService,'SearchInit').and.callFake(() => {
       return of({'sessionId': 'f15722db-eaad-4bf0-bb68-a7acba80e15c'});
     })
 
     comp.onSubmit(formData);
 
     expect(comp.searchInitResponse?.sessionId === 'f15722db-eaad-4bf0-bb68-a7acba80e15c')
-    .withContext('not empty after calling search init')
+    .withContext('not empty after calling #searchElements')
     .toBe(true);
-  })
+      
+  });
 
   it('getStatus() should call for status and update #searchStatusResponse', () => {
-    const comp = new ActivitySearchComponent(router, activityService,autosuggestService);
+    const comp = new HotelSearchComponent(router,autosuggestService, hotelService);
     
-    spyOn(activityService, 'SearchStatus').and.callFake(() => {
+    spyOn(hotelService, 'SearchStatus').and.callFake(() => {
         return of({
           "status": "Completed",
           "resultCount": 53,
-          "errors": []
-        });
+        "errors": []
+    });
     })
 
     comp.getStatus();
+    // console.log(comp.searchStatusResponse)
     expect(comp.searchStatusResponse.status=='Completed')
       .withContext('statusResponse not null afterwards')
       .toBe(true);
   });
 
-  it('getResults() should fetch search results into #activities', () => {
-    const comp = new ActivitySearchComponent(router, activityService,autosuggestService);
-    expect(comp.activities == null)
-      .withContext('initially activities is empty')
+  it('getResults() should fetch search results into #hotels', () => {
+    const comp = new HotelSearchComponent(router,autosuggestService, hotelService);
+    expect(comp.hotels?.length == 0)
+      .withContext('initially #elements is empty')
       .toBe(true);
     
-    spyOn(activityService, 'SearchResult').and.callFake(() => {
+    spyOn(hotelService, 'SearchResult').and.callFake(() => {
       return of({
         "sessionId": "79287bd8-3cbc-4c7c-998e-67f0f85c29ae-ACNXT$1371",
-        "activities": [1, 2, 3, 4],
-        "paging":{}
+        "hotels": [1, 2, 3, 4]
       });
     });
     comp.getResults();
-    expect(comp.activities!=null)
+    expect(comp.hotels?.length >0)
       .withContext('not empty after calling searchResults()')
       .toBe(true);
   });

@@ -10,10 +10,18 @@ export class CarResultsComponent implements OnInit {
   res_state:any=null;
   cars_results:any=null;
   cars:CarResult[]=[];
+  rentals:Rental[]=[];
   constructor(private router:Router) {
     this.res_state=this.router.getCurrentNavigation()?.extras.state;
+    this.rentals=this.getRentals();
+    this.cars=this.getResultToDisplay();
+   }
 
-    var rentals = this.res_state.cars.carRentals.map((carRental:any)=>{
+  ngOnInit(): void {
+  }
+
+  getRentals(){
+    return this.res_state?.cars.carRentals.map((carRental:any)=>{
       return {
         "totalFare":carRental.displayFare.totalFare,
         "fareType":carRental.displayFare.type,
@@ -24,9 +32,12 @@ export class CarResultsComponent implements OnInit {
         "vehicleRefId":carRental.vehicleRefId
       }
     });
+  }
+
+  getResultToDisplay(){
 
     let i =0;
-    var merged = this.res_state.cars.vehicles.map((vehicle:any)=>{
+    return this.res_state?.cars.vehicles.map((vehicle:any)=>{
       return{
         "airConditioned":vehicle.airConditioned,
         "category":vehicle.category,
@@ -36,25 +47,30 @@ export class CarResultsComponent implements OnInit {
         "passengerCapacity":vehicle.passengerCapacity,
         "transmission":vehicle.transmission,
         "vehicleType":vehicle.type,
-        "totalFare":rentals[i].totalFare,
-        "fareType":rentals[i].fareType,
-        "cancellationPolicy":rentals[i].cancellationPolicy,
-        "freeCancellationEndDate":rentals[i].freeCancellationEndDate,
-        "id":rentals[i].id,
-        "inventoryType":rentals[i].inventoryType,
-        "vehicleRefId":rentals[i++].vehicleRefId
+        "totalFare":this.rentals[i].totalFare,
+        "fareType":this.rentals[i].fareType,
+        "cancellationPolicy":this.rentals[i].cancellationPolicy,
+        "freeCancellationEndDate":this.rentals[i].freeCancellationEndDate,
+        "id":this.rentals[i].id,
+        "inventoryType":this.rentals[i].inventoryType,
+        "vehicleRefId":this.rentals[i++].vehicleRefId
       }
     });
     
-    this.cars=merged;
-   }
-
-  ngOnInit(): void {
   }
-
 }
 
-interface CarResult{
+export interface Rental{
+  "totalFare":number,
+        "fareType":string,
+        "cancellationPolicy":string,
+        "freeCancellationEndDate":string,
+        "id":string,
+        "inventoryType":string,
+        "vehicleRefId":string
+}
+
+export interface CarResult{
   "airConditioned":boolean,
   "category":string,
   "desc":string,

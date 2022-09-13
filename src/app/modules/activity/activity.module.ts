@@ -14,7 +14,7 @@ import { ActivityResultsComponent } from './activity-results/activity-results.co
   imports: [
     CommonModule,
     ActivityRoutingModule,
-    FormsModule
+    FormsModule,
   ],
   exports:[
     ActivitySearchComponent

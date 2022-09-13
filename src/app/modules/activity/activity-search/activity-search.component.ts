@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { delay, timer } from 'rxjs';
+import { delay } from 'rxjs';
 import { ActivityService } from 'src/app/services/activity-service.service';
 import { AutosuggestService } from 'src/app/services/autosuggest-service.service';
 
@@ -59,10 +59,10 @@ export class ActivitySearchComponent implements OnInit {
     }
   ]
 
-  async getSuggestedPlaces(){
-    let location=this.activitySearchInput;
-    if(location.length>2){
-      (await this.autoSuggestService.fetchLocations(location,'Activities')).subscribe(rs=>{
+  getSuggestedPlaces(data:any){
+    let location=data;
+    if(location.length>2){  
+      (this.autoSuggestService.fetchLocations(location,'Activities')).subscribe(rs=>{
         this.results=rs;
         let i=0;
         this.locations=this.results.s.map((place:any)=>{
@@ -79,60 +79,78 @@ export class ActivitySearchComponent implements OnInit {
         // console.log(this.locations);
         this.locations_loaded=true;
       });;
-
-      
     }
   }
-
-
-  activities:any=null;
-  async onSubmit(data:any){
-    // console.log(data);
-    let {latitude,longitude,city_name} = this.locations[this.selectedLocationId];
-
-    let request_data = {
-      "from_date":data.from_date,
-      "to_date":data.to_date,
-      "latitude":latitude,
-      "longitude":longitude
-    };
-
-    (await this.searchService.SearchInit(request_data))
-    .subscribe(async (res:any)=>{
-      // console.log(res);
-      delay(3000)(await this.searchService.SearchStatus(res))
-      .subscribe(async (rs:any)=>{
-        if(rs.status!='Completed'){
-          delay(5000);
-        }
-        // console.log(rs);
-
-        (await this.searchService.SearchResult(res))
-        .subscribe((res:any)=>{
-          this.activities=res.activities;
-          // console.log(this.activities);
-          var res_state = {
-            activities:this.activities,
-            "cityName":city_name,
-            "fromDate":data.from_date,
-            "toDate":data.to_date
-          }
-          this.router.navigateByUrl('/activity',{state:res_state});
-        })
-      })
-    })
-    
-  }
-
-  
-
   activitySearchInput:string='';
   selectedLocationId:any;
   chooseLocation(data:any){
     this.locations_loaded=false;
     this.selectedLocationId=data.id;
-    this.activitySearchInput=this.locations[data.id].city_name;
+    this.activitySearchInput=this.locations[data.id]?.city_name;
   }
+
+  formData:any=null;
+  searchInitResponse:any=null;
+  city_name='';
+
+  onSubmit(data:any){
+    this.formData=data;
+    // console.log(data);
+    let latitude = this.locations[this.selectedLocationId]?.latitude;
+    let longitude = this.locations[this.selectedLocationId]?.longitude;
+    this.city_name=this.locations[this.selectedLocationId]?.city_name;
+    let request_data = {
+      "from_date":
+      data.from_date,
+      // "2023-02-01",
+      "to_date":
+      data.to_date,
+      // "2023-02-02",
+      "latitude":
+      latitude,
+      // 36.083333333333336,
+      "longitude":
+      longitude
+      // -115.16666666666669
+    };
+
+    (this.searchService.SearchInit(request_data))
+    .subscribe((res:any)=>{
+      this.searchInitResponse=res;
+      this.getStatus();
+    })
+    
+  }
+
+  searchStatusResponse:any=null;
+
+  getStatus(){
+    (this.searchService.SearchStatus(this.searchInitResponse))
+    .subscribe((rs:any)=>{
+      this.searchStatusResponse=rs;
+      this.getResults();
+    })
+  }
+
+  activities:any=null;
+  searchResultResponse:any=null;
+
+  getResults(){
+    (this.searchService.SearchResult(this.searchInitResponse))
+    .subscribe((res:any)=>{
+      this.activities=res.activities;
+      // console.log(this.activities);
+      var res_state = {
+        activities:this.activities,
+        "cityName":this.city_name,
+        "fromDate":this.formData?.from_date,
+        "toDate":this.formData?.to_date
+      }
+      this.router.navigateByUrl('/activity',{state:res_state});
+    })
+  }
+
+  
 }
 
 interface LocationObject{
