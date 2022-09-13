@@ -21,4 +21,4 @@
 
 ### Test Coverage
 
-* ![Click here to view coverage](coverage/expedia_replica/index.html)
+* <image src="./src/assets/Coverage.png" width="600" height="350" >
