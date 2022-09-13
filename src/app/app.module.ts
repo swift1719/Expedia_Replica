@@ -9,6 +9,7 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HomeModule } from './modules/home/home.module';
 import {HttpClientModule} from '@angular/common/http';
+import { FormsModule, NgForm } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +21,8 @@ import {HttpClientModule} from '@angular/common/http';
     AppRoutingModule,
     NgbModule,
     HomeModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
