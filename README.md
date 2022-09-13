@@ -3,15 +3,22 @@
 
 ### Screenshots 
 
-* [1. Autosuggest](src/assets/HomeSearchAutosuggest.png)
-* [2. Hotel search ](src/assets/HotelSearch.png)
-* [3. Hotel search result](src/assets/HotelSearchResult.png)
-* [4. Car search](src/assets/Cars_Search.png)
-* [5. Car search result](src/assets/CarsSearchResult.png)
-* [6. Activity search](src/assets/ActvitySearch.png)
-* [7. Activity search result](src/assets/ActivitySearchResult.png)
+* #### Autosuggest
+  <image src="./src/assets/HomeSearchAutosuggest.png" width="500" height="300">
+* #### Hotel search 
+  <image src="src/assets/HotelSearch.png" width="500" height="300">
+* #### Hotel search result
+  <image src="src/assets/HotelSearchResult.png" width="500" height="300">
+* #### Car search
+  <image src="src/assets/Cars_Search.png" width="500" height="300">
+* #### Car search result
+  <image src="src/assets/CarsSearchResult.png" width="500" height="300">
+* #### Activity search 
+  <image src="src/assets/ActvitySearch.png" width="500" height="300">
+* #### Activity search result
+  <image src="src/assets/ActivitySearchResult.png" width="500" height="300">
 
 
 ### Test Coverage
 
-* ![](coverage/expedia_replica/index.html)
+* ![Click here to view coverage](coverage/expedia_replica/index.html)
